@@ -1,0 +1,17 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+.env
+venv/
+.venv/
+
+# SQLite database (generated locally by seed.py — do not commit)
+backend/database.db
+
+# Node
+frontend/node_modules/
+frontend/build/
+
+# macOS
+.DS_Store
