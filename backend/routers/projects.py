@@ -1,3 +1,5 @@
+from typing import Optional
+
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 
@@ -8,7 +10,11 @@ router = APIRouter(prefix="/projects", tags=["projects"])
 
 
 @router.get("/")
-async def list_projects(state: str = None, fuel: str = None, db: Session = Depends(get_db)):
+async def list_projects(
+    state: Optional[str] = None,
+    fuel: Optional[str] = None,
+    db:  Session = Depends(get_db),
+):
     """
     Return all projects.
     Optional query params:
@@ -16,26 +22,55 @@ async def list_projects(state: str = None, fuel: str = None, db: Session = Depen
       - fuel:  filter by fuel type (e.g. "solar", "wind", "storage")
     Both filters can be combined.
     """
-    # TODO: implement filtering and return the list of projects
-    pass
+    query = db.query(Project)
 
+    if state is not None:
+        query = query.filter(Project.state == state.upper())
+
+    if fuel is not None:
+        query = query.filter(Project.fuel_type == fuel.lower())
+
+    return query.all()
 
 @router.get("/{project_id}")
-async def get_project(project_id: int, db: Session = Depends(get_db)):
+def get_project(project_id: int, db: Session = Depends(get_db)):
     """
     Return a single project by ID.
     Raise HTTP 404 if the project does not exist.
     """
-    # TODO: implement
-    pass
+    project = (
+        db.get(Project, project_id)
+    )
+
+    if project is None:
+        raise HTTPException(
+            status_code=404,
+            detail="Project not found",
+        )
+
+    return project
 
 
 @router.post("/{project_id}/bookmark")
-async def toggle_bookmark(project_id: int, db: Session = Depends(get_db)):
+def toggle_bookmark(project_id: int, db: Session = Depends(get_db)):
     """
     Toggle the bookmarked status of a project.
     Return: { "bookmarked": true } or { "bookmarked": false }
     Raise HTTP 404 if the project does not exist.
     """
-    # TODO: implement
-    pass
+    project = (
+        db.get(Project, project_id)
+    )
+
+    if project is None:
+        raise HTTPException(
+            status_code=404,
+            detail="Project not found",
+        )
+
+    project.bookmarked = not project.bookmarked
+
+    db.commit()
+    db.refresh(project)
+
+    return { "bookmarked": project.bookmarked }
