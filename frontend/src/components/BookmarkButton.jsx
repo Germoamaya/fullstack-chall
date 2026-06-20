@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import BookmarkIcon from "./BookmarkIcon";
+import "./BookmarkButton.css";
 
 export default function BookmarkButton({ project, onToggleBookmark }) {
   const [updating, setUpdating] = useState(false);
@@ -21,15 +23,24 @@ export default function BookmarkButton({ project, onToggleBookmark }) {
     <div className="bookmark-button-wrapper">
       <button
         type="button"
-        className="bookmark-button"
+        className={`bookmark-button ${
+          project.bookmarked ? "bookmark-button--active" : ""
+        }`}
         disabled={updating}
         onClick={handleClick}
       >
-        {updating
-          ? "Updating..."
-          : project.bookmarked
-            ? "Remove bookmark"
-            : "Add bookmark"}
+        <BookmarkIcon
+          filled={project.bookmarked}
+          size={18}
+          className="bookmark-button__icon"
+        />
+        <span>
+          {updating
+            ? "Updating..."
+            : project.bookmarked
+              ? "Remove bookmark"
+              : "Add bookmark"}
+        </span>
       </button>
       {error && (
         <p className="bookmark-button__error" role="alert">

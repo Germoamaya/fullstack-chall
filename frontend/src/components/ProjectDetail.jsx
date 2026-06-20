@@ -1,5 +1,6 @@
-import React from 'react';
-import BookmarkButton from './BookmarkButton';
+import React from "react";
+import BookmarkButton from "./BookmarkButton";
+import "./ProjectDetail.css";
 
 export default function ProjectDetail({ project, onToggleBookmark }) {
   if (!project) {
@@ -36,7 +37,15 @@ export default function ProjectDetail({ project, onToggleBookmark }) {
         <dd>{project.developer}</dd>
 
         <dt>Bookmarked</dt>
-        <dd>{project.bookmarked ? 'Yes' : 'No'}</dd>
+        <dd
+          className={
+            project.bookmarked
+              ? "project-detail__bookmark-status project-detail__bookmark-status--active"
+              : "project-detail__bookmark-status"
+          }
+        >
+          {project.bookmarked ? "Yes" : "No"}
+        </dd>
       </dl>
 
       <div className="project-detail__actions">

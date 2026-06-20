@@ -7,6 +7,8 @@ import {
 } from "../constants";
 import useProjects from "../hooks/useProjects";
 import ProjectDetail from "./ProjectDetail";
+import BookmarkIcon from "./BookmarkIcon";
+import "./ProjectList.css";
 
 export default function ProjectList() {
   const {
@@ -125,6 +127,11 @@ export default function ProjectList() {
                         <td>{project.status}</td>
                         <td>
                           <span
+                            className={`bookmark-indicator ${
+                              project.bookmarked
+                                ? "bookmark-indicator--active"
+                                : ""
+                            }`}
                             role="img"
                             aria-label={
                               project.bookmarked
@@ -132,7 +139,7 @@ export default function ProjectList() {
                                 : "Not bookmarked"
                             }
                           >
-                            {project.bookmarked ? "★" : "☆"}
+                            <BookmarkIcon filled={project.bookmarked} />
                           </span>
                         </td>
                       </tr>
