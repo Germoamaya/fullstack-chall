@@ -18,15 +18,24 @@ export default function BookmarkButton({ project, onToggleBookmark }) {
   };
 
   return (
-    <div>
-      <button type="button" disabled={updating} onClick={handleClick}>
+    <div className="bookmark-button-wrapper">
+      <button
+        type="button"
+        className="bookmark-button"
+        disabled={updating}
+        onClick={handleClick}
+      >
         {updating
           ? "Updating..."
           : project.bookmarked
             ? "Remove bookmark"
             : "Add bookmark"}
       </button>
-      {error && <p role="alert">{error}</p>}
+      {error && (
+        <p className="bookmark-button__error" role="alert">
+          {error}
+        </p>
+      )}
     </div>
   );
 }

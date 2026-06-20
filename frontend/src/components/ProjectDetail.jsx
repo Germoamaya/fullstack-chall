@@ -3,13 +3,23 @@ import BookmarkButton from './BookmarkButton';
 
 export default function ProjectDetail({ project, onToggleBookmark }) {
   if (!project) {
-    return <p>Select a project to view its details.</p>;
+    return (
+      <aside
+        className="project-detail project-detail--empty"
+        aria-label="Selected project details"
+      >
+        <p>Select a project to view its details.</p>
+      </aside>
+    );
   }
 
   return (
-    <article>
-      <h2>{project.name}</h2>
-      <dl>
+    <aside className="project-detail" aria-label="Selected project details">
+      <header className="project-detail__header">
+        <h2 className="project-detail__title">{project.name}</h2>
+      </header>
+
+      <dl className="project-detail__fields">
         <dt>State</dt>
         <dd>{project.state}</dd>
 
@@ -28,7 +38,10 @@ export default function ProjectDetail({ project, onToggleBookmark }) {
         <dt>Bookmarked</dt>
         <dd>{project.bookmarked ? 'Yes' : 'No'}</dd>
       </dl>
-      <BookmarkButton project={project} onToggleBookmark={onToggleBookmark} />
-    </article>
+
+      <div className="project-detail__actions">
+        <BookmarkButton project={project} onToggleBookmark={onToggleBookmark} />
+      </div>
+    </aside>
   );
 }
