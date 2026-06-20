@@ -1,17 +1,32 @@
-import React from 'react';
+import React, { useState } from "react";
 
-// TODO: implement BookmarkButton
-//
-// Props:
-//   - project: the project object
-//   - onToggle: callback function called with the updated project after toggling
-//               so the parent can update its state
-//
-// This component should:
-//   - Show a visual indicator of the current bookmarked state (e.g. filled/empty star)
-//   - On click: call POST /api/projects/{id}/bookmark
-//   - Update the UI immediately after the response — no page reload
+export default function BookmarkButton({ project, onToggleBookmark }) {
+  const [updating, setUpdating] = useState(false);
+  const [error, setError] = useState(null);
 
-export default function BookmarkButton({ project, onToggle }) {
-  return null;
+  const handleClick = async () => {
+    setError(null);
+    setUpdating(true);
+
+    try {
+      await onToggleBookmark(project.id);
+    } catch (err) {
+      setError(err.message || "Failed to update bookmark");
+    } finally {
+      setUpdating(false);
+    }
+  };
+
+  return (
+    <div>
+      <button type="button" disabled={updating} onClick={handleClick}>
+        {updating
+          ? "Updating..."
+          : project.bookmarked
+            ? "Remove bookmark"
+            : "Add bookmark"}
+      </button>
+      {error && <p role="alert">{error}</p>}
+    </div>
+  );
 }

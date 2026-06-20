@@ -1,10 +1,12 @@
 import React from 'react';
+import ProjectList from './components/ProjectList';
 
 function App() {
   return (
     <div>
-      Hello world
-      {/* TODO: render ProjectList and ProjectDetail */}
+      <h1>PJM Project Explorer</h1>
+      <p>Browse, filter, and bookmark renewable energy projects.</p>
+      <ProjectList />
     </div>
   );
 }

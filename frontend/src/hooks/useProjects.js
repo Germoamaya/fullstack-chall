@@ -54,13 +54,35 @@ export default function useProjects() {
     };
   }, [stateFilter, fuelFilter]);
 
-  const updateProject = useCallback((updatedProject) => {
-    setProjects((currentProjects) =>
-      currentProjects.map((project) =>
-        project.id === updatedProject.id ? updatedProject : project
-      )
-    );
-  }, []);
+  const toggleBookmark = useCallback(
+    async (projectId) => {
+      const response = await fetch(`${API_URL}${projectId}/bookmark`, {
+        method: "POST",
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to update bookmark");
+      }
+
+      const updatedBookmark = await response.json();
+      const currentProject = projects.find(
+        (project) => project.id === projectId,
+      );
+      const updatedProject = {
+        ...currentProject,
+        bookmarked: updatedBookmark.bookmarked,
+      };
+
+      setProjects((currentProjects) =>
+        currentProjects.map((project) =>
+          project.id === updatedProject.id ? updatedProject : project,
+        ),
+      );
+
+      return updatedProject;
+    },
+    [projects],
+  );
 
   return {
     projects,
@@ -70,6 +92,6 @@ export default function useProjects() {
     setStateFilter,
     fuelFilter,
     setFuelFilter,
-    updateProject,
+    toggleBookmark,
   };
 }
